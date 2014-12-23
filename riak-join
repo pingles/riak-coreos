@@ -14,7 +14,9 @@ if [ "${#selected_columns[@]}" -eq "1" ]; then
     exit 0
 fi
 
-for join_ip in $(${etcdctl} ls /riak/bootstrap/machines); do
+for node_path in $(${etcdctl} ls /riak/bootstrap/machines); do
+  join_ip=$( ${etcdctl} get $node_path --consistent )
+  
   if [[ "${join_ip}" != "${listen_ip}" ]]; then
     echo "will join with ${join_ip}"
     echo "waiting for k/v service to be running..."
