@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+listen_ip="$1"
+
+docker_host_ip=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
+echo "docker host ip: $docker_host_ip"
+etcdctl="etcdctl --peers http://$docker_host_ip:4001"
+
+echo "listing other riak machines"
+bootstrap_node_paths=( $(${etcdctl} ls /riak/bootstrap/machines) )
+first_node_path=${bootstrap_node_paths[0]}
+
+if [[ -n "${first_node_path}" ]]; then
+  echo "getting node details $first_node_path"
+  join_ip=$( ${etcdctl} get $first_node_path --consistent )
+  echo "$first_node_path: $join_ip, current local ip: ${listen_ip}"
+  if [[ "${join_ip}" == "${listen_ip}" ]]; then
+    echo "started as first node in cluster, not joining"
+  else
+    echo "will join with ${join_ip}"
+    /usr/sbin/riak-admin cluster join riak@${join_ip}
+    /usr/sbin/riak-admin cluster plan
+    /usr/sbin/riak-admin cluster commit
+  fi
+fi

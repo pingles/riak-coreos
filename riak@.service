@@ -23,6 +23,7 @@ ExecStart=/bin/bash -c '/usr/bin/docker run \
                           --rm \
                           pingles/riak-coreos:latest \
                           %m ${COREOS_PUBLIC_IPV4}'
+ExecStartPost=/bin/bash -c '/usr/bin/docker exec riak /usr/sbin/riak-join ${COREOS_PUBLIC_IPV4}'
 
 ExecStop=-/usr/bin/docker stop riak
 ExecStopPost=-/bin/bash -c '/usr/bin/etcdctl rm /riak/bootstrap/machines/%m'

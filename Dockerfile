@@ -11,6 +11,7 @@ RUN tar zxvf etcd.tar.gz
 RUN mv ./etcd-v0.4.6-linux-amd64/etcdctl /usr/bin/etcdctl
 
 ADD riak-start-bootstrap /usr/sbin/riak-start-bootstrap
+ADD riak-join /usr/sbin/riak-join
 
 EXPOSE 8087 8098 8099 4369
 

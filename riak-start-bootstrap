@@ -11,17 +11,10 @@ etcdctl="etcdctl --peers http://$docker_host_ip:4001"
 echo "storing current machine in etcd"
 ${etcdctl} set "/riak/bootstrap/machines/$machine_id" $listen_ip > /dev/null
 
-echo "listing other bootstrap machines"
-bootstrap_node_paths=( $(${etcdctl} ls /riak/bootstrap/machines) )
-first_node_path=${bootstrap_node_paths[0]}
+echo "riak.conf: setting data directory to /data"
+sed -i "s%/var/lib/riak%/data%" /etc/riak/riak.conf
+echo "riak.conf: using ${listen_ip} for listen address"
+sed -i "s%127.0.0.1%${listen_ip}%" /etc/riak/riak.conf
 
-if [[ -n "${first_node_path}" ]]; then
-  echo "getting node details $first_node_path"
-  join_ip=$( ${etcdctl} get $first_node_path --consistent )
-  echo "$first_node_path: $join_ip, current local ip: ${listen_ip}"
-  if [[ "${join_ip}" == "${listen_ip}" ]]; then
-    echo "starting as first node in cluster"
-  else
-    echo "starting new node in cluster, will join with ${join_ip}"
-  fi
-fi
+echo "starting riak..."
+/usr/sbin/riak start
