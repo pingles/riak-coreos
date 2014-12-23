@@ -4,6 +4,7 @@ After=docker.service
 Requires=docker.service
 
 [Service]
+TimeoutStartSec=0
 EnvironmentFile=/etc/environment
 ExecStartPre=/usr/bin/mkdir -p /var/lib/riak && chmod a+rw /var/lib/riak
 ExecStartPre=/usr/bin/mkdir -p /var/log/riak && chmod a+rw /var/log/riak
