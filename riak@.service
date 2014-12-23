@@ -5,9 +5,6 @@ Requires=docker.service
 
 [Service]
 EnvironmentFile=/etc/environment
-Type=forking
-GuessMainPID=yes
-TimeoutStartSec=0
 ExecStartPre=/usr/bin/mkdir -p /var/lib/riak && chmod a+rw /var/lib/riak
 ExecStartPre=/usr/bin/mkdir -p /var/log/riak && chmod a+rw /var/log/riak
 ExecStartPre=-/usr/bin/docker kill riak
@@ -31,4 +28,4 @@ ExecStop=-/usr/bin/docker stop riak
 ExecStopPost=-/bin/bash -c '/usr/bin/etcdctl rm /riak/bootstrap/machines/%m'
 
 [X-Fleet]
-Conflicts=consul@*.service
+Conflicts=riak@*.service
