@@ -17,6 +17,9 @@ fi
 for join_ip in $(${etcdctl} ls /riak/bootstrap/machines); do
   if [[ "${join_ip}" != "${listen_ip}" ]]; then
     echo "will join with ${join_ip}"
+    echo "waiting for k/v service to be running..."
+    /usr/sbin/riak-admin wait-for-service riak_kv
+    echo "k/v service running, attempting to join cluster"
     /usr/sbin/riak-admin cluster join riak@${join_ip}
     /usr/sbin/riak-admin cluster plan
     /usr/sbin/riak-admin cluster commit
