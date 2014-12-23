@@ -13,7 +13,10 @@ RUN mv ./etcd-v0.4.6-linux-amd64/etcdctl /usr/bin/etcdctl
 ADD riak-start-bootstrap /usr/sbin/riak-start-bootstrap
 ADD riak-join /usr/sbin/riak-join
 
-RUN cat riak.env >> /usr/lib/riak/lib/env.sh
+ADD riak.env /tmp/riak.env
+RUN cat /tmp/riak.env >> /usr/lib/riak/lib/env.sh
+RUN rm /tmp/riak.env
+
 ADD riak.defaults /etc/default/riak
 
 EXPOSE 8087 8098 8099 4369
