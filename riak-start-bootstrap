@@ -27,6 +27,4 @@ echo "riak.conf: replacing 127.0.0.1 to 0.0.0.0"
 sed -i "s%127.0.0.1%0.0.0.0%" /etc/riak/riak.conf
 
 echo "starting riak..."
-export WAIT_FOR_ERLANG=60
-
 /usr/sbin/riak start
