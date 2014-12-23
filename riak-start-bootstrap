@@ -16,10 +16,15 @@ ${etcdctl} set "/riak/bootstrap/machines/$machine_id" $listen_ip > /dev/null
 
 echo "riak.conf: setting data directory to /data"
 sed -i "s%/var/lib/riak%/data%" /etc/riak/riak.conf
+
 echo "riak.conf: setting log directory to /logs"
 sed -i 's%$(platform_log_dir)%/logs%' /etc/riak/riak.conf
-echo "riak.conf: using ${listen_ip} for listen address"
-sed -i "s%127.0.0.1%${listen_ip}%" /etc/riak/riak.conf
+
+echo "riak.conf: setting nodename = riak@${listen_ip}"
+sed -i "s%nodename = riak@127.0.0.1%nodename = riak@${listen_ip}%" /etc/riak/riak.conf
+
+echo "riak.conf: replacing 127.0.0.1 to 0.0.0.0"
+sed -i "s%127.0.0.1%0.0.0.0%" /etc/riak/riak.conf
 
 echo "starting riak..."
 WAIT_FOR_ERLANG=60 /usr/sbin/riak start
