@@ -27,7 +27,7 @@ ADD supervisord.conf /etc/supervisord.conf
 
 ADD riak.defaults /etc/default/riak
 
-EXPOSE 8087 8098 8099 4369
+EXPOSE 8087 8098 8099 4369 5000
 
 VOLUME ["/data", "/logs"]
 
