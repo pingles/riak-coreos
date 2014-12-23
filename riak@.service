@@ -5,6 +5,8 @@ Requires=docker.service
 
 [Service]
 EnvironmentFile=/etc/environment
+Type=forking
+GuessMainPID=yes
 TimeoutStartSec=0
 ExecStartPre=/usr/bin/mkdir -p /var/lib/riak && chmod a+rw /var/lib/riak
 ExecStartPre=-/usr/bin/docker kill riak
