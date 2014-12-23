@@ -1,0 +1,29 @@
+[Unit]
+Description=Riak
+After=docker.service
+Requires=docker.service
+
+[Service]
+EnvironmentFile=/etc/environment
+TimeoutStartSec=0
+ExecStartPre=/usr/bin/mkdir -p /var/lib/riak && chmod a+rw /var/lib/riak
+ExecStartPre=-/usr/bin/docker kill riak
+ExecStartPre=-/usr/bin/docker rm riak
+ExecStartPre=/usr/bin/docker pull pingles/riak-coreos:latest
+
+ExecStart=/bin/bash -c '/usr/bin/docker run \
+                          --name riak \
+                          -v /var/lib/riak:/data \
+                          -p ${COREOS_PUBLIC_IPV4}:8087:8087 \
+                          -p ${COREOS_PUBLIC_IPV4}:8098:8098 \
+                          -p ${COREOS_PUBLIC_IPV4}:8099:8099 \
+                          -p ${COREOS_PUBLIC_IPV4}:4369:4369 \
+                          --rm \
+                          quay.io/pingles/consul-coreos:latest \
+                          %m ${COREOS_PUBLIC_IPV4}'
+
+ExecStop=-/usr/bin/docker stop consul
+ExecStopPost=-/bin/bash -c '/usr/bin/etcdctl rm /consul.io/bootstrap/machines/%m'
+
+[X-Fleet]
+Conflicts=consul@*.service

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+machine_id="$1"
+local_ip="$2"
+
+echo "starting riak on machine $machine_id, local ip $local_ip"
+docker_host_ip=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
+echo "docker host ip: $docker_host_ip"
