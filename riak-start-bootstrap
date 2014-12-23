@@ -3,6 +3,9 @@
 machine_id="$1"
 listen_ip="$2"
 
+chown riak:riak /data
+chown riak:riak /logs
+
 echo "starting riak on machine $machine_id, listen ip $listen_ip"
 docker_host_ip=$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}')
 echo "docker host ip: $docker_host_ip"
@@ -19,4 +22,4 @@ echo "riak.conf: using ${listen_ip} for listen address"
 sed -i "s%127.0.0.1%${listen_ip}%" /etc/riak/riak.conf
 
 echo "starting riak..."
-/usr/sbin/riak start
+WAIT_FOR_ERLANG=60 /usr/sbin/riak start
