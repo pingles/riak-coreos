@@ -19,6 +19,8 @@ ADD riak.env /tmp/riak.env
 RUN cat /tmp/riak.env >> /usr/lib/riak/lib/env.sh
 RUN rm /tmp/riak.env
 
+ADD supervisord.conf /etc/supervisord.conf
+
 ADD riak.defaults /etc/default/riak
 
 EXPOSE 8087 8098 8099 4369
