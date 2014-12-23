@@ -20,6 +20,7 @@ ExecStart=/bin/bash -c '/usr/bin/docker run \
                           -p ${COREOS_PUBLIC_IPV4}:8098:8098 \
                           -p ${COREOS_PUBLIC_IPV4}:8099:8099 \
                           -p ${COREOS_PUBLIC_IPV4}:4369:4369 \
+                          -p ${COREOS_PUBLIC_IPV4}:5000:5000 \
                           --rm \
                           pingles/riak-coreos:latest \
                           %m ${COREOS_PUBLIC_IPV4}'
