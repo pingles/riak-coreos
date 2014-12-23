@@ -9,7 +9,7 @@ etcdctl="etcdctl --peers http://$docker_host_ip:4001"
 echo "listing other riak machines"
 bootstrap_node_paths=( $(${etcdctl} ls /riak/bootstrap/machines) )
 
-if [ "${#selected_columns[@]}" -eq "1" ]; then
+if [ "${#bootstrap_node_paths[@]}" -eq "1" ]; then
     echo "no other nodes available, can't join"
     exit 0
 fi
