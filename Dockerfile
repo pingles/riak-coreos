@@ -15,6 +15,10 @@ RUN mv ./etcd-v0.4.6-linux-amd64/etcdctl /usr/bin/etcdctl
 ADD riak-start-bootstrap /usr/sbin/riak-start-bootstrap
 ADD riak-join /usr/sbin/riak-join
 
+ADD riak.conf /tmp/riak.conf
+RUN cat /tmp/riak.conf >> /etc/riak/riak.conf
+RUN rm /tmp/riak.conf
+
 ADD riak.env /tmp/riak.env
 RUN cat /tmp/riak.env >> /usr/lib/riak/lib/env.sh
 RUN rm /tmp/riak.env
