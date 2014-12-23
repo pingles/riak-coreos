@@ -6,8 +6,11 @@ Requires=docker.service
 [Service]
 TimeoutStartSec=0
 EnvironmentFile=/etc/environment
-ExecStartPre=/usr/bin/mkdir -p /var/lib/riak && chmod a+rw /var/lib/riak
-ExecStartPre=/usr/bin/mkdir -p /var/log/riak && chmod a+rw /var/log/riak
+ExecStartPre=-/usr/bin/mkdir -p /var/lib/riak
+ExecStartPre=-/usr/bin/mkdir -p /var/log/riak
+ExecStartPre=/usr/bin/chmod 755 /var/log/riak
+ExecStartPre=/usr/bin/chmod 755 /var/lib/riak
+
 ExecStartPre=-/usr/bin/docker kill riak
 ExecStartPre=-/usr/bin/docker rm riak
 ExecStartPre=/usr/bin/docker pull pingles/riak-coreos:latest
