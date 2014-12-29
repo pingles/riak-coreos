@@ -2,7 +2,7 @@ FROM  ubuntu:14.04
 MAINTAINER Paul Ingles <paul@oobaloo.co.uk>
 
 RUN apt-get update
-RUN apt-get install -y supervisor unzip
+RUN apt-get install -y supervisor
 
 ADD https://web-dl.packagecloud.io/basho/riak/packages/ubuntu/trusty/riak_2.0.2-1_amd64.deb /tmp/riak.deb
 RUN dpkg -i /tmp/riak.deb
