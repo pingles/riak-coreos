@@ -1,0 +1,25 @@
+[Unit]
+Description=Riak registration in Consul
+BindsTo=riak@%i.service
+
+After=riak@%i.service
+Requires=riak@%i.service
+After=consul*.service
+Requires=consul*.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/environment
+ExecStart=/bin/bash -c '/usr/bin/curl -X PUT \
+                                      -H "Content-Type: application/json" \
+                                      -d \'{"Node": "%m","Address": "${COREOS_PUBLIC_IPV4}","Service": {"ID": "riak-%i","Service": "riak","Port": 8087}}\' \
+                                      http://${COREOS_PUBLIC_IPV4}:8500/v1/catalog/register'
+ExecStop=-/bin/bash -c '/usr/bin/curl -X PUT \
+                                      -H "Content-Type: application/json" \
+                                      -d \'{"Node": "%m","ServiceID": "riak-%i"}\' \
+                                      http://${COREOS_PUBLIC_IPV4}:8500/v1/catalog/deregister'
+RemainAfterExit=yes
+
+[X-Fleet]
+MachineOf=riak@%i.service
+Conflicts=riak-announce@*.service
