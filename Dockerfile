@@ -12,12 +12,6 @@ ADD https://github.com/coreos/etcd/releases/download/v0.4.6/etcd-v0.4.6-linux-am
 RUN tar zxvf etcd.tar.gz
 RUN mv ./etcd-v0.4.6-linux-amd64/etcdctl /usr/bin/etcdctl
 
-ADD https://dl.bintray.com/mitchellh/consul/0.4.1_linux_amd64.zip /tmp/consul.zip
-RUN unzip consul.zip
-RUN chmod +x consul
-RUN mv consul /bin/consul
-RUN rm consul.zip
-
 ADD riak-start-bootstrap /usr/sbin/riak-start-bootstrap
 ADD riak-join /usr/sbin/riak-join
 
